@@ -1,0 +1,82 @@
+{% extends 'staff/base.html' %}
+<title>Admin | Dashboard</title>
+{% block body_block %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Tambah Staff Baru        
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="col-md-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Silahkan tambah staff baru dengan mengisi form ini</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal" role="form" action="/staff/create-staff/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+              <div class="box-body">
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Nama Pengguna</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="username" placeholder="nama pengguna untuk akun" required min-length=5>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Kata Sandi</label>
+
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" name="password" placeholder="kata sandi" required min-length=8>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Ulang Kata Sandi</label>
+
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" name="password2" placeholder="masukkan kembali kata sandi" required min-length=8>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Nama Lengkap</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="full_name" placeholder="nama lengkap" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Peran</label>
+
+                  <div class="col-sm-10">
+                    <select class="form-control" name="role" required>
+                      <option value="admin">Admin</option>
+                      <option value="surveyer">Surveyer</option>
+                      <option value="quality">Quality Control</option>
+                    </select>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Foto Profil</label>
+
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" value="test" name="photo" required>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="submit" class="btn btn-info pull-right">Tambah Staff</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+    </section>  
+{% endblock %}
+

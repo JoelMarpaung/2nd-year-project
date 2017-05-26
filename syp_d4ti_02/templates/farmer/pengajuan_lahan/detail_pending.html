@@ -1,0 +1,104 @@
+{% extends 'farmer/base.html' %}
+<title>Farmer | Dashboard</title>
+{% load staticfiles %}
+{% block body_block %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Detail Pengajuan Lahan di Pending
+        <a href="{% url 'farmer:daftarPengajuanLahan' %}" class="btn btn-success btn">Kembali</a>        
+      </h1>
+
+    </section>
+    <!-- Main content -->
+    <section class="content">      
+      <div class="col-md-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Untuk melakukan perubahan pengajuan silahkan ubah pengajuan lahan anda pada form ini</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            {% for pending in pengajuan_pending %}
+            <form class="form-horizontal" role="form" action="/ubah-pengajuan/{{ pending.id }}/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+              <div class="box-body">
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Luas Lahan</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" value="{{ pending.luas_lahan }}" placeholder="Cth : 2 hektar / 250 m2" name="luas_lahan" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Alamat Lahan</label>
+
+                  <div class="col-sm-10">
+                    <textarea class="form-control" name="alamat_lahan" placeholder="Cth : Jln. Sigura-gura, Desa Pangombusan, Kecamatan Parmaksian, Kabupaten Toba Samosir" required>{{ pending.alamat_lahan }}</textarea>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Keterangan Lahan</label>
+
+                  <div class="col-sm-10">
+                    <textarea class="form-control" name="keterangan" placeholder="Cth : Lahan ini merupakan lahan basah dan sangat subur. Tanah pada lahan ini adalah tanah hitam. Lahan ditumbuhi tumbuhan rawa" required>{{ pending.keterangan }}</textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Sertifikat Lahan</label>
+
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" value="test" name="image_certificate" required>
+                    <div class="user-panel">
+                      <img src="{% static pending.image_certificate %}" class="img-square" alt="User Image" width=35%>
+                    </div>
+                  </div>
+                </div>
+                {% for gambar in gambar_pending %}
+                {% if gambar.gambar == 'image1' %}
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Gambar Lahan 1</label>
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" value="test" name="image1" required>
+                    <div class="user-panel">
+                      <img src="{% static gambar.image %}" class="img-square" alt="User Image" width=35%>
+                    </div>
+                  </div>
+                </div>
+                {% elif gambar.gambar == 'image2' %}
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Gambar Lahan 2</label>
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" value="test" name="image2" required>
+                    <div class="user-panel">
+                      <img src="{% static gambar.image %}" class="img-square" alt="User Image" width=35%>
+                    </div>
+                  </div>
+                </div>
+                {% else %}
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Gambar Lahan 3</label>
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" value="test" name="image3" required>
+                    <div class="user-panel">
+                      <img src="{% static gambar.image %}" class="img-square" alt="User Image" width=35%>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="submit" class="btn btn-info pull-right">Ubah Pengajuan</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+            {% endfor %}
+          </div>
+    </section>  
+{% endblock %}

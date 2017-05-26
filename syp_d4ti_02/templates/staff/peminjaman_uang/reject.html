@@ -1,0 +1,76 @@
+{% extends 'staff/base.html' %}
+<title>Admin | Dashboard</title>
+{% block body_block %}
+{% load staticfiles %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Daftar Pengajuan Peminjaman
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Pengajuan Peminjaman ditolak</h3>              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Nama Bank</th>
+                  <th>No. Rekening</th>
+                  <th>Status</th>
+                  <th>Besar Peminjaman</th>                  
+                  <th>Tanggal Peminjaman</th>
+                  <th>Aksi</th>
+                </tr>         
+              </thead>  
+                {% for reject in peminjaman_uang %}
+                <tr>                  
+                  <td>{{ reject.bank_name }} </td>
+                  <td>{{ reject.no_rekening }} </td>
+                  <td><span class="label label-danger">Tolak</span></td>
+                  <td>{{ reject.besar_peminjaman }} </td>                  
+                  <td>{{ reject.tanggal_peminjaman }} </td>                  
+                  <td><a href="/staff/detail-peminjaman-tolak/{{ reject.id }}" class="btn btn-info">Detail</a>&nbsp; &nbsp; &nbsp;<a href="/staff/hapus-peminjaman/{{ reject.id }}" class="btn btn-danger">Hapus</a>
+                </tr>
+                {% endfor %}
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+              {% if peminjaman_uang.has_previous %}
+                <li><a href="?page={{ peminjaman_uang.previous_page_number }}">&laquo;</a></li>
+              {% else %}
+                <li><a disabled>&laquo;</a></li>
+              {% endif %}                
+              {% for pg in peminjaman_uang.paginator.page_range %}
+                {% if peminjaman_uang.number == pg %}
+                    <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if peminjaman_uang.has_next %}
+                <li><a href="?page={{ peminjaman_uang.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                <li><a disabled>&raquo;</a></li>
+              {% endif %}                              
+              </ul>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>      
+    </section>
+{% endblock %}
+

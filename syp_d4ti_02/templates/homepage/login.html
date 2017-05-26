@@ -1,0 +1,43 @@
+{% extends 'homepage/base.html' %}
+{% load staticfiles %}
+{% block body_block %}
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>SI</b> Manajemen Lahan</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Masuk menggunakan akun anda</p>
+
+    <form action="/login/" method="POST" id="loginform" class="form-horizontal">
+     {% csrf_token %}
+      <div class="form-group has-feedback">
+        <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="nama pengguna">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input id="login-password" type="password" class="form-control" name="password" placeholder="kata sandi">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+        
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Masuk</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+    <div class="social-auth-links text-center">
+    </div>
+    <!-- /.social-auth-links -->
+    <a href="{% url 'register' %}" class="text-center">Daftar Akun</a>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+{% endblock %}

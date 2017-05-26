@@ -1,0 +1,77 @@
+{% extends 'staff/base.html' %}
+<title>Admin | Dashboard</title>
+{% block body_block %}
+{% load staticfiles %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Daftar Staff 
+        <a href="{% url 'staff:daftarStaff' %}" class="btn btn-success btn">Kembali</a>        
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+    	{% for staff in daftar_staff %}
+    	<form class="form-horizontal" role="form" action="/staff/ubah-staff/{{ staff.id }}/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+              <div class="box-body">
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Nama Pengguna</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" value="{{ staff.username }}" class="form-control" name="username" placeholder="nama pengguna untuk akun" disabled required min-length=5>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Nama Lengkap</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" value="{{ staff.full_name }}" class="form-control" name="full_name" placeholder="nama lengkap" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Peran</label>
+
+                  <div class="col-sm-10">
+                    <select class="form-control" name="role" required>
+                    	{% if staff.role == 'admin' %}
+                    		<option selected value="admin">Admin</option>
+                    		<option value="surveyer">Surveyer</option>
+                    		<option value="quality">Quality Control</option>
+                    	{% elif staff.role == 'surveyer' %}
+                    		<option value="admin">Admin</option>
+                    		<option selected value="surveyer">Surveyer</option>
+                    		<option value="quality">Quality Control</option>
+                    	{% else %}
+                    		<option value="admin">Admin</option>
+                    		<option value="surveyer">Surveyer</option>
+                    		<option selected value="quality">Quality Control</option>
+                    	{% endif %}                      
+                    </select>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Ganti Foto Profil</label>
+
+                  <div class="col-sm-10">
+                    <input type="file" required class="form-control" value="test" name="photo">
+                    <div class="user-panel">
+                      <img src="{% static staff.photo %}" class="img-circle" alt="User Image" width=20%>
+                      &nbsp; &nbsp; <i class="fa fa-arrow-left"></i>&nbsp;&nbsp;<label>Foto profil saat ini</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="submit" class="btn btn-info pull-right">Ubah Staff</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>                  
+            {% endfor %}
+    </section>
+   </div>
+{% endblock %}

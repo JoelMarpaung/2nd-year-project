@@ -1,0 +1,71 @@
+{% extends 'quality_control/base.html' %}
+<title>Admin | Dashboard</title>
+{% block body_block %}
+{% load staticfiles %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Daftar Petani
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Daftar Seluruh Petani</h3>              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Username Petani</th>             
+                  <th>Nama Lengkap Petani</th>
+                  <th>No. Telepon</th>                       
+                  <th>Aksi</th>
+                </tr>         
+              </thead>  
+                {% for data in data_farmer %}
+                <tr>                  
+                  <td>{{ data.username }} </td>                  
+                  <td>{{ data.full_name }} </td>                  
+                  <td>{{ data.phone }} </td>                                                                  
+                  <td><a href="/quality/detail-petani/{{ data.id }}" class="btn btn-info">Detail</td>
+                </tr>
+                {% endfor %}
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+              {% if data_farmer.has_previous %}
+                <li><a href="?page={{ data_farmer.previous_page_number }}">&laquo;</a></li>
+              {% else %}
+                <li><a disabled>&laquo;</a></li>
+              {% endif %}                
+              {% for pg in data_farmer.paginator.page_range %}
+                {% if data_farmer.number == pg %}
+                    <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if data_farmer.has_next %}
+                <li><a href="?page={{ data_farmer.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                <li><a disabled>&raquo;</a></li>
+              {% endif %}                              
+              </ul>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>      
+    </section>
+{% endblock %}

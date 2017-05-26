@@ -1,0 +1,80 @@
+{% extends 'farmer/base.html' %}
+<title>Farmer | Dashboard</title>
+{% block body_block %}
+{% load staticfiles %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Daftar Pengajuan Peminjaman <a href="{% url 'farmer:daftarPeminjamanUang' %}" class="btn btn-warning btn-lg">Pending</a>&nbsp; &nbsp; &nbsp;<a href="{% url 'farmer:daftarPeminjamanTolak' %}" class="btn btn-danger btn-lg">Tolak</a>&nbsp; &nbsp; &nbsp;<a href="{% url 'farmer:daftarPeminjamanSetuju' %}" class="btn btn-success btn-lg">Setuju</a>       
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Pengajuan Peminjaman disetujui</h3>              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Nama Bank</th>
+                  <th>No. Rekening</th>
+                  <th>Status</th>
+                  <th>Besar Peminjaman</th>                  
+                  <th>Tanggal Peminjaman</th>
+                  <th>Aksi</th>
+                </tr>         
+              </thead>  
+                {% for setuju in peminjaman_uang %}
+                <tr>                  
+                  <td>{{ setuju.bank_name }} </td>
+                  <td>{{ setuju.no_rekening }} </td>
+                  <td>{% if setuju.status == 'belumpinjam' %} 
+                      <span class="label label-warning">Belum Dipinjam</span>
+                      {% else %}
+                      <span class="label label-success">Sudah Dipinjam</span>
+                      {% endif %}
+                  </td>
+                  <td>{{ setuju.besar_peminjaman }} </td>                  
+                  <td>{{ setuju.tanggal_peminjaman }} </td>                  
+                  <td><a href="/detail-peminjaman-setuju/{{ setuju.id }}" class="btn btn-info">Detail</a></td>
+                </tr>
+                {% endfor %}
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+              {% if peminjaman_uang.has_previous %}
+                <li><a href="?page={{ peminjaman_uang.previous_page_number }}">&laquo;</a></li>
+              {% else %}
+                <li><a disabled>&laquo;</a></li>
+              {% endif %}                
+              {% for pg in peminjaman_uang.paginator.page_range %}
+                {% if peminjaman_uang.number == pg %}
+                    <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if peminjaman_uang.has_next %}
+                <li><a href="?page={{ peminjaman_uang.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                <li><a disabled>&raquo;</a></li>
+              {% endif %}                              
+              </ul>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>      
+    </section>
+{% endblock %}

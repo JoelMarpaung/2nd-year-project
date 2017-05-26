@@ -1,0 +1,222 @@
+{% extends 'farmer/base.html' %}
+<title>Farmer | Dashboard</title>
+{% load staticfiles %}
+{% block body_block %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+      {% for data in data_lahan %} 
+        Detail Lahan
+        <a href="/data-lahan/" class="btn btn-success btn">Kembali</a>        
+      </h1>
+
+    </section>
+    <!-- Main content -->
+    <section class="content">      
+      <div class="col-md-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Berikut adalah data detail lahan petani</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->                       
+              <div class="box-body">
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Luas Lahan</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.luas_lahan }}</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Alamat Lahan</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.alamat_lahan }}</p>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Keterangan Lahan</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.keterangan }}</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Sertifikat Lahan</label>
+
+                  <div class="col-sm-10">                    
+                    <div class="user-panel">
+                      <img src="{% static data.image_certificate %}" class="img-square" alt="User Image" width=35%>
+                    </div>
+                  </div>
+                </div>
+                {% for gambar in data_gambar %}
+                {% if gambar.gambar == 'image1' %}
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Gambar Lahan 1</label>
+                  <div class="col-sm-10">                    
+                    <div class="user-panel">
+                      <img src="{% static gambar.image %}" class="img-square" alt="User Image" width=35%>
+                      
+                    </div>
+                  </div>
+                </div>
+                {% elif gambar.gambar == 'image2' %}
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Gambar Lahan 2</label>
+                  <div class="col-sm-10">                    
+                    <div class="user-panel">
+                      <img src="{% static gambar.image %}" class="img-square" alt="User Image" width=35%>
+                      
+                    </div>
+                  </div>
+                </div>
+                {% else %}
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Gambar Lahan 3</label>
+                  <div class="col-sm-10">                    
+                    <div class="user-panel">
+                      <img src="{% static gambar.image %}" class="img-square" alt="User Image" width=35%>                      
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+              </div>              
+            {% endfor %}
+            <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Daftar kegiatan lahan</h3>               
+            </div>                        
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Kegiatan</th>             
+                  <th>Keterangan</th>                  
+                  <th>Tanggal Mulai</th>
+                  <th>Tanggal Selesai</th>
+                  <th>Status</th>                  
+                </tr>         
+              </thead>  
+                {% for data in data_kegiatan %}
+                <tr>                  
+                  <td>{{ data.nama_kegiatan }} </td>                  
+                  <td>{{ data.keterangan }} </td>                                    
+                  <td>{{ data.tanggal_mulai }} </td>                  
+                  <td>{{ data.tanggal_selesai }} </td>                  
+                  <td>{% if data.status == 'progress' %} 
+                      <span class="label label-warning">Sedang dikerjakan</span>
+                      {% else %}
+                      <span class="label label-success">Sudah selesai</span>
+                      {% endif %}
+                  </td>                                    
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          <!-- /.box -->
+        </div>
+      </div>                  
+          </div>
+
+
+<div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Daftar komposisi lahan</h3>
+            </div>                        
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Komposisi</th>             
+                  <th>Jenis</th>                  
+                  <th>Keterangan</th>                                    
+                </tr>         
+              </thead>  
+                {% for data in data_komposisi %}
+                <tr>                  
+                  <td>{{ data.nama_komposisi }} </td>                  
+                  <td>{{ data.jenis_komposisi }} </td>                                    
+                  <td>{{ data.keterangan }} </td>                                                      
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          <!-- /.box -->
+        </div>
+      </div>                  
+          </div>
+
+            <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Daftar Pupuk dan Bibit yang harus digunakan di lahan ini</h3>                
+            </div>                        
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Nama Komponen</th>             
+                  <th>Jenis Komponen</th>                  
+                  <th>Keterangan</th>                                    
+                </tr>         
+              </thead>  
+                {% for data in data_komponen %}
+                <tr>                  
+                  <td>{{ data.nama_komponen }} </td>                  
+                  <td>{{ data.jenis_komponen }} </td>                                    
+                  <td>{{ data.keterangan }} </td>                                                      
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          <!-- /.box -->
+        </div>
+      </div>                  
+          </div>
+
+          <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Estimasi Tanam - Rawat - Panen Tebu</h3>                
+            </div>                        
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Estimasi</th>                               
+                  <th>Keterangan</th>           
+                  <th>Tanggal Estimasi</th>                                                          
+                </tr>         
+              </thead>  
+                {% for data in data_estimasi %}
+                <tr>                  
+                  <td>{{ data.nama_estimasi }} </td>                  
+                  <td>{{ data.keterangan }} </td>                                    
+                  <td>{{ data.tanggal_estimasi }} </td>                                    
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          <!-- /.box -->
+        </div>
+      </div>                  
+          </div>
+          </div>
+    </section>  
+{% endblock %}

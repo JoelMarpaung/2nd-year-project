@@ -1,0 +1,64 @@
+{% extends 'farmer/base.html' %}
+<title>Farmer | Dashboard</title>
+{% block body_block %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Detail Pengajuan Peminjaman Uang 
+        <a href="{% url 'farmer:daftarPeminjamanUang' %}" class="btn btn-success btn">Kembali</a>              
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="col-md-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Untuk mengubah ajuan peminjaman uang silahkan ubah form ini</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            {% for pending in peminjaman_uang %}
+            <form class="form-horizontal" role="form" action="/ubah-peminjaman/{{ pending.id }}/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+              <div class="box-body">
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Nama Bank</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Cth : BNI / BCA / BRI" name="bank_name" value="{{ pending.bank_name }}" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">No Rekening</label>
+                  <div class="col-sm-10">
+                    <input type="text" value="{{ pending.no_rekening }}" class="form-control" placeholder="0123-08-078987-77-9" name="no_rekening" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Besar Peminjaman</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" value="{{ pending.besar_peminjaman }}" class="form-control" placeholder="Cth : Rp 2.500.000" name="besar_peminjaman" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Alasan Peminjaman</label>
+
+                  <div class="col-sm-10">
+                    <textarea class="form-control" name="alasan_peminjaman" placeholder="Cth : Untuk mengolah lahan dan membeli peralatan pengolahan lahan, seperti cangkul, dll." required>{{ pending.alasan_peminjaman }}</textarea>
+                  </div>
+                </div>                                
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="submit" class="btn btn-info pull-right">Ubah Peminjaman</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+            {% endfor %}
+          </div>
+    </section>  
+{% endblock %}

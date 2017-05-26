@@ -1,0 +1,109 @@
+{% extends 'staff/base.html' %}
+<title>Admin | Dashboard</title>
+{% block body_block %}
+{% load staticfiles %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Daftar Pengajuan Peminjaman
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Pengajuan Peminjaman dipending</h3>              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Username</th>             
+                  <th>Nama Lengkap</th>                                    
+                  <th>Status</th>
+                  <th>Besar Peminjaman</th>                                    
+                  <th>Tanggal Peminjaman</th>
+                  <th>Aksi</th>
+                </tr>         
+              </thead>  
+                {% for pending in peminjaman_uang %}
+                <tr>                  
+                  <td>{{ pending.farmer.username }} </td>                  
+                  <td>{{ pending.farmer.full_name }} </td>                                                   
+                  <td><span class="label label-warning">Pending</span></td>
+                  <td>{{ pending.besar_peminjaman }} </td>                  
+                  <td>{{ pending.tanggal_peminjaman }} </td>                  
+                  <td><a href="/staff/detail-peminjaman/{{ pending.id }}" class="btn btn-info">Detail</a>&nbsp; &nbsp; &nbsp;<a href="/staff/terima-peminjaman/{{ pending.id }}" class="btn btn-success">Terima</a>&nbsp; &nbsp; &nbsp;<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Tolak</button></td>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Masukkan Alasan Penolakan</h4>
+      </div>
+      <div class="modal-body">
+      <form class="form-horizontal" role="form" action="/staff/tolak-peminjaman/{{ pending.id }}/" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+                  <label class="col-sm-2 control-label">Alasan Penolakan</label>
+
+                  <div class="col-sm-10">
+                    <textarea class="form-control" name="alasan_penolakan" placeholder="Masukkan Alasan Penolakan" required></textarea>
+                  </div>
+                </div>                                
+                <div class="box-footer">
+                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="submit" class="btn btn-danger pull-right">Tolak</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+                   
+      </div>      
+    </div>
+
+  </div>
+</div>
+
+
+                </tr>
+                {% endfor %}
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+              {% if peminjaman_uang.has_previous %}
+                <li><a href="?page={{ peminjaman_uang.previous_page_number }}">&laquo;</a></li>
+              {% else %}
+                <li><a disabled>&laquo;</a></li>
+              {% endif %}                
+              {% for pg in peminjaman_uang.paginator.page_range %}
+                {% if peminjaman_uang.number == pg %}
+                    <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if peminjaman_uang.has_next %}
+                <li><a href="?page={{ peminjaman_uang.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                <li><a disabled>&raquo;</a></li>
+              {% endif %}                              
+              </ul>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>      
+    </section>
+{% endblock %}

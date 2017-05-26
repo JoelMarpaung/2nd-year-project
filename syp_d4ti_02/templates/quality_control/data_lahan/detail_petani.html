@@ -1,0 +1,136 @@
+{% extends 'quality_control/base.html' %}
+<title>Staff | Dashboard</title>
+{% load staticfiles %}
+{% block body_block %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Detail Petani
+        <a href="{% url 'quality_control:indexDataLahan' %}" class="btn btn-success btn">Kembali</a>        
+      </h1>
+
+    </section>
+    <!-- Main content -->
+    <section class="content">      
+      <div class="col-md-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Berikut adalah data detail dari petani</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            {% for data in data_farmer %}            
+              <div class="box-body">
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Foto Profil</label>
+
+                  <div class="col-sm-10">                    
+                    <div class="user-panel">
+                      <img src="{% static data.photo %}" class="img-circle" alt="User Image" width=20%>
+                      
+                    </div>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Username</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.username }}</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Nama Lengkap</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.full_name }}</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">No. Telepon</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.phone }}</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Kabupaten</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.kabupaten }}</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Kecamatan</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.kecamatan }}</p>
+                  </div>
+                </div>                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Alamat</label>
+
+                  <div class="col-sm-10">
+                    <p>{{ data.alamat }}</p>
+                  </div>
+                </div>                
+              </div>              
+            {% endfor %}
+            <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Daftar lahan yang dimiliki petani</h3>              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table id="example2" class="table table-hover">
+              <thead>
+                <tr>                  
+                  <th>Luas Lahan</th>             
+                  <th>Alamat Lahan</th>                  
+                  <th>Aksi</th>
+                </tr>         
+              </thead>  
+                {% for data in data_lahan %}
+                <tr>                  
+                  <td>{{ data.luas_lahan }} </td>                  
+                  <td>{{ data.alamat_lahan }} </td>                                    
+                  <td><a href="/quality/detail-lahan/{{ data.id }}" class="btn btn-info">Detail</td>
+                </tr>
+                {% endfor %}
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+              {% if data_lahan.has_previous %}
+                <li><a href="?page={{ data_lahan.previous_page_number }}">&laquo;</a></li>
+              {% else %}
+                <li><a disabled>&laquo;</a></li>
+              {% endif %}                
+              {% for pg in data_lahan.paginator.page_range %}
+                {% if data_lahan.number == pg %}
+                    <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if data_lahan.has_next %}
+                <li><a href="?page={{ data_lahan.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                <li><a disabled>&raquo;</a></li>
+              {% endif %}                              
+              </ul>
+            </div>
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>      
+          </div>
+    </section>  
+{% endblock %}
