@@ -11,16 +11,18 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from farmer.models import *
 from staff.models import *
+from django.contrib import messages
 
 # Create your views here.
 def register(request):
 	if request.method == 'POST':
-		user = User(
+		try:
+			user = User(
 				username = request.POST['username'],				
-			)
-		user.set_password(request.POST['password'],)
-		user.save()
-		farmer = Pengguna(
+				)
+			user.set_password(request.POST['password'],)
+			user.save()
+			farmer = Pengguna(
 				username = request.POST['username'],
 				full_name = request.POST['full_name'],
 				phone = request.POST['phone'],								
@@ -29,16 +31,20 @@ def register(request):
 				alamat = request.POST['alamat'],							
 				photo = 'unknown.png',
 			) 
-		farmer.save()
-		account = Akun(
+			farmer.save()
+			account = Akun(
 				akun = User.objects.get(username=request.POST['username']),
 				pengguna = Pengguna.objects.get(username=request.POST['username']),
 				akun_id = User.objects.get(username=request.POST['username']).id,
 				pengguna_id = Pengguna.objects.get(username=request.POST['username']).id,
 				jenis_akun = "farmer",				
 			)
-		account.save()
-		return redirect('/login')
+			account.save()
+			messages.add_message(request, messages.INFO, 'Akun berhasil di daftarkan. Silahkan masuk')			
+			return HttpResponseRedirect('/login/')
+		except:
+			messages.add_message(request, messages.INFO, 'Nama pengguna sudah ada silahkan pilih nama yang lain')			
+			return HttpResponseRedirect('/register/')
 	else:
 		return render(request,'homepage/register.html')
 
@@ -61,7 +67,8 @@ def loginAdmin(request):
 			else:
 				print("Account Not Active")
 		else:
-			print("Account Not Active")
+			messages.add_message(request, messages.INFO, 'Username atau password anda salah')			
+			return HttpResponseRedirect('/login-admin/')
 	else:
 		return render(request,'homepage/login_admin.html') 
 
@@ -77,9 +84,10 @@ def login(request):
 				request.session['pengguna_id'] = akun.pengguna.id				
 				request.session['username'] = request.POST['username']					
 				return redirect('/')	
-			else:
-				print("Account Not Active")
-		else:
-			print("Account Not Active")
+			else:				
+				messages.add_message(request, messages.INFO, 'User belum terverifikasi')
+		else:			
+			messages.add_message(request, messages.INFO, 'Nama pengguna atau kata sandi anda salah')			
+			return HttpResponseRedirect('/login/')
 	else:
 		return render(request,'homepage/login.html') 

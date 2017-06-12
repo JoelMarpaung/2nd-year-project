@@ -11,7 +11,16 @@
     <p class="login-box-msg">Masuk menggunakan akun anda</p>
 
     <form action="/login/" method="POST" id="loginform" class="form-horizontal">
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
      {% csrf_token %}
+     
+
       <div class="form-group has-feedback">
         <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="nama pengguna">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>

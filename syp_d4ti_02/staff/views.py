@@ -120,12 +120,31 @@ def tolakPengajuan(request, id):
 	pengajuan_tolak.alasan_penolakan = request.POST['alasan_penolakan']
 	pengajuan_tolak.status = 'reject'
 	pengajuan_tolak.save()
+	notif = Notifications(
+			pengirim = 'Admin',
+			judul = 'Pengajuan lahan di tolak',
+			keterangan = 'Pengajuan lahan yang anda ajukan ditolak dikarenakan '+request.POST['alasan_penolakan'],
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = pengajuan_tolak.farmer_id,
+		)
+	notif.save()
 	return redirect('/staff/reject-pengajuan-lahan')		
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)
 def terimaPengajuan(request, id):
 	account = Staff.objects.get(username=request.session['username'],role='admin')
 	pengajuan_lahan = Data_Pengajuan_Lahan.objects.get(id=id)	
+	notif = Notifications(
+			pengirim = 'Admin',
+			judul = 'Pengajuan Lahan di terima',
+			keterangan = 'Peminjaman Lahan yang anda ajukan diterima',
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = pengajuan_lahan.farmer_id,
+		)
+	notif.save()
+
 	create_lahan = Data_Lahan(
 				image_certificate = pengajuan_lahan.image_certificate,
 				luas_lahan = pengajuan_lahan.luas_lahan,
@@ -220,12 +239,30 @@ def tolakPeminjaman(request, id):
 	peminjaman_tolak.alasan_penolakan = request.POST['alasan_penolakan']
 	peminjaman_tolak.status = 'reject'
 	peminjaman_tolak.save()
+	notif = Notifications(
+			pengirim = 'Admin',
+			judul = 'Peminjaman uang di tolak',
+			keterangan = 'Peminjaman Uang yang anda ajukan ditolak dikarenakan '+request.POST['alasan_penolakan'],
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = peminjaman_tolak.farmer_id,
+		)
+	notif.save()
 	return redirect('/staff/reject-peminjaman-uang')		
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)
 def terimaPeminjaman(request, id):
 	account = Staff.objects.get(username=request.session['username'],role='admin')
 	peminjaman_uang = Data_Pengajuan_Peminjaman.objects.get(id=id)
+	notif = Notifications(
+			pengirim = 'Admin',
+			judul = 'Peminjaman uang di terima',
+			keterangan = 'Peminjaman Uang yang anda ajukan diterima',
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = peminjaman_uang.farmer_id,
+		)
+	notif.save()
 	data_peminjaman = Data_Peminjaman(
 						bank_name = peminjaman_uang.bank_name,
 						no_rekening = peminjaman_uang.no_rekening,
@@ -266,6 +303,15 @@ def konfirmasiPeminjaman(request, id):
 	peminjaman_uang.status = 'sudahpinjam'
 	peminjaman_uang.tanggal_peminjaman = datetime.datetime.now()
 	peminjaman_uang.save()
+	notif = Notifications(
+			pengirim = 'Admin',
+			judul = 'Peminjaman uang dikonfirmasi',
+			keterangan = 'Peminjaman Uang yang anda ajukan sudah dikonfirmasi dan ditransfer',
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = peminjaman_uang.farmer_id,
+		)
+	notif.save()
 	return redirect('/staff/accept-peminjaman-uang')
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)

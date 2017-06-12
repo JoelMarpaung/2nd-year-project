@@ -69,6 +69,17 @@ def tambahKegiatan(request, id):
 				lahan_id = id,
 		)
 	kegiatan.save()
+
+	lahan = Data_Lahan.objects.get(id=kegiatan.lahan_id)
+	notif = Notifications(
+			pengirim = 'Surveyer',
+			judul = 'Tambah Kegiatan Lahan',
+			keterangan = 'Kegiatan Lahan anda sudah ditambah yaitu, '+request.POST['nama_kegiatan'],
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = lahan.farmer_id,
+		)
+	notif.save()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)
@@ -78,6 +89,17 @@ def konfirmasiKegiatan(request, id):
 	kegiatan.status = 'done'
 	kegiatan.tanggal_selesai = datetime.datetime.now()
 	kegiatan.save()
+
+	lahan = Data_Lahan.objects.get(id=kegiatan.lahan_id)
+	notif = Notifications(
+			pengirim = 'Surveyer',
+			judul = 'Konfirmasi Kegiatan Lahan',
+			keterangan = 'Kegiatan Lahan anda sudah dikonfirmasi yaitu, '+kegiatan.nama_kegiatan,
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = lahan.farmer_id,
+		)
+	notif.save()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)

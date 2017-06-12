@@ -133,3 +133,14 @@ class Data_Estimasi_Tanam_Rawat_Panen(models.Model):
 
 	def __str__(self):
 		return self.lahan.farmer.full_name
+
+class Notifications(models.Model):
+	pengirim = models.CharField(max_length=50, blank=True)
+	judul = models.CharField(max_length=50, blank=True)
+	keterangan = models.TextField(blank=True)
+	tanggal = models.DateField(blank=True)
+	status = models.TextField(max_length=50)
+	farmer = models.ForeignKey(Pengguna)
+
+	def __str__(self):
+		return self.farmer.full_name

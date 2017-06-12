@@ -14,6 +14,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 
 from farmer.models import *
+from django.contrib import messages
 
 @login_required(login_url=settings.LOGIN_URL)
 def logout(request):
@@ -24,7 +25,9 @@ def logout(request):
 @login_required(login_url=settings.LOGIN_URL)
 def index(request):
 	account = Pengguna.objects.get(username=request.session['username'])
-	return render(request, 'farmer/index.html', {'nbar':'home', 'farmer':account})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/index.html', {'nbar':'home', 'farmer':account, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def createPengajuanLahan(request):
@@ -61,8 +64,10 @@ def createPengajuanLahan(request):
 		return redirect('/daftar-pengajuan-lahan')
 	else:
 		account = Pengguna.objects.get(username=request.session['username'])
+		notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+		num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
 	return render(request, 'farmer/pengajuan_lahan/create.html', 
-		{'nbar':'activePengajuan', 'li':'createPengajuan', 'farmer':account})
+		{'nbar':'activePengajuan', 'li':'createPengajuan', 'farmer':account, 'notifs':notifs, 'num':num})
 	
 
 @login_required(login_url=settings.LOGIN_URL)
@@ -77,8 +82,10 @@ def daftarPengajuanLahan(request):
 		pengajuan_pending = paginator.page(1)
 	except EmptyPage:
 		pengajuan_pending = paginator.page(paginator.num_pages)
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
 	return render(request, 'farmer/pengajuan_lahan/daftar.html', 
-		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_pending':pengajuan_pending})
+		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_pending':pengajuan_pending, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def daftarPengajuanLahanTolak(request):
@@ -92,9 +99,10 @@ def daftarPengajuanLahanTolak(request):
 		pengajuan_reject = paginator.page(1)
 	except EmptyPage:
 		pengajuan_reject = paginator.page(paginator.num_pages)
-
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
 	return render(request, 'farmer/pengajuan_lahan/tolak.html', 
-		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_reject':pengajuan_reject})
+		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_reject':pengajuan_reject, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def ubahPengajuan(request, id):
@@ -124,18 +132,20 @@ def ubahPengajuan(request, id):
 		account = Pengguna.objects.get(username=request.session['username'])
 		pengajuan_pending = Data_Pengajuan_Lahan.objects.filter(id=id)
 		gambar_pending = Pengajuan_Gambar_Lahan.objects.filter(lahan_id=id)
-	
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
 	return render(request, 'farmer/pengajuan_lahan/detail_pending.html', 
-		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_pending':pengajuan_pending, 'gambar_pending':gambar_pending})
+		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_pending':pengajuan_pending, 'gambar_pending':gambar_pending, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def rejectPengajuan(request, id):
 	account = Pengguna.objects.get(username=request.session['username'])
 	pengajuan_reject = Data_Pengajuan_Lahan.objects.filter(id=id)
 	gambar_reject = Pengajuan_Gambar_Lahan.objects.filter(lahan_id=id)
-	
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
 	return render(request, 'farmer/pengajuan_lahan/detail_tolak.html', 
-		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_reject':pengajuan_reject, 'gambar_reject':gambar_reject})
+		{'nbar':'activePengajuan', 'li':'daftarPengajuan', 'farmer':account, 'pengajuan_reject':pengajuan_reject, 'gambar_reject':gambar_reject, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def hapusPengajuan(request, id):
@@ -169,7 +179,9 @@ def createPeminjamanUang(request):
 		return redirect('/daftar-peminjaman-uang')
 	else:
 		account = Pengguna.objects.get(username=request.session['username'])
-	return render(request, 'farmer/peminjaman_uang/create.html', {'nbar':'activePeminjaman', 'li':'createPeminjaman', 'farmer':account})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/peminjaman_uang/create.html', {'nbar':'activePeminjaman', 'li':'createPeminjaman', 'farmer':account, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def daftarPeminjamanUang(request):
@@ -183,7 +195,9 @@ def daftarPeminjamanUang(request):
 		peminjaman_uang = paginator.page(1)
 	except EmptyPage:
 		peminjaman_uang = paginator.page(paginator.num_pages)
-	return render(request, 'farmer/peminjaman_uang/daftar.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/peminjaman_uang/daftar.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def ubahPeminjaman(request, id):
@@ -199,7 +213,9 @@ def ubahPeminjaman(request, id):
 	else : 
 		account = Pengguna.objects.get(username=request.session['username'])
 		peminjaman_uang = Data_Pengajuan_Peminjaman.objects.filter(id=id)
-	return render(request, 'farmer/peminjaman_uang/detail_pending.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/peminjaman_uang/detail_pending.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def hapusPeminjaman(request, id):
@@ -219,13 +235,17 @@ def daftarPeminjamanSetuju(request):
 		peminjaman_uang = paginator.page(1)
 	except EmptyPage:
 		peminjaman_uang = paginator.page(paginator.num_pages)
-	return render(request, 'farmer/peminjaman_uang/setuju.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/peminjaman_uang/setuju.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang, 'notifs':notifs, 'num':num})
 
 @login_required(login_url=settings.LOGIN_URL)
 def detailPeminjamanSetuju(request, id):
 	account = Pengguna.objects.get(username=request.session['username'])
 	peminjaman_uang = Data_Peminjaman.objects.filter(id=id)	
-	return render(request, 'farmer/peminjaman_uang/detail_sudah.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang})	
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/peminjaman_uang/detail_sudah.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang, 'notifs':notifs, 'num':num})	
 
 @login_required(login_url=settings.LOGIN_URL)
 def daftarPeminjamanTolak(request):
@@ -239,13 +259,17 @@ def daftarPeminjamanTolak(request):
 		peminjaman_uang = paginator.page(1)
 	except EmptyPage:
 		peminjaman_uang = paginator.page(paginator.num_pages)
-	return render(request, 'farmer/peminjaman_uang/tolak.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang})	
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/peminjaman_uang/tolak.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang, 'notifs':notifs, 'num':num})	
 
 @login_required(login_url=settings.LOGIN_URL)
 def detailPeminjamanTolak(request, id):
 	account = Pengguna.objects.get(username=request.session['username'])
 	peminjaman_uang = Data_Pengajuan_Peminjaman.objects.filter(id=id)	
-	return render(request, 'farmer/peminjaman_uang/detail_tolak.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang})	
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/peminjaman_uang/detail_tolak.html', {'nbar':'activePeminjaman', 'li':'daftarPeminjaman', 'farmer':account, 'peminjaman_uang':peminjaman_uang, 'notifs':notifs, 'num':num})	
 
 @login_required(login_url=settings.LOGIN_URL)
 def hapusPeminjamanTolak(request, id):
@@ -265,7 +289,9 @@ def indexDataLahan(request):
 		data_lahan = paginator.page(1)
 	except EmptyPage:
 		data_lahan = paginator.page(paginator.num_pages)
-	return render(request, 'farmer/data_lahan/index.html', {'nbar':'lahan', 'farmer':account, 'data_lahan':data_lahan})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/data_lahan/index.html', {'nbar':'lahan', 'farmer':account, 'data_lahan':data_lahan, 'notifs':notifs, 'num':num})
 
 
 @login_required(login_url=settings.LOGIN_URL)
@@ -277,13 +303,17 @@ def detailLahan(request, id):
 	data_komposisi = Data_Komposisi_Lahan.objects.filter(lahan_id=id).order_by('-id')
 	data_komponen = Data_Bibit_Pupuk.objects.filter(lahan_id=id).order_by('-id')
 	data_estimasi = Data_Estimasi_Tanam_Rawat_Panen.objects.filter(lahan_id=id).order_by('-id')
-	return render(request,'farmer/data_lahan/detail_lahan.html', {'nbar':'lahan', 'farmer':account,'data_lahan':data_lahan,'data_gambar':data_gambar, 'data_kegiatan':data_kegiatan, 'data_komposisi':data_komposisi, 'data_komponen':data_komponen, 'data_estimasi':data_estimasi})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request,'farmer/data_lahan/detail_lahan.html', {'nbar':'lahan', 'farmer':account,'data_lahan':data_lahan,'data_gambar':data_gambar, 'data_kegiatan':data_kegiatan, 'data_komposisi':data_komposisi, 'data_komponen':data_komponen, 'data_estimasi':data_estimasi, 'notifs':notifs, 'num':num})
 
 
 @login_required(login_url=settings.LOGIN_URL)
 def indexDataDiri(request):
 	account = Pengguna.objects.get(username=request.session['username'])
-	return render(request, 'farmer/profil/index.html', {'farmer':account})
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	return render(request, 'farmer/profil/index.html', {'farmer':account, 'notifs':notifs, 'num':num})
 
 
 @login_required(login_url=settings.LOGIN_URL)
@@ -307,7 +337,42 @@ def gantiProfil(request):
 @login_required(login_url=settings.LOGIN_URL)
 def gantiPassword(request):
 	account = Pengguna.objects.get(username=request.session['username'])
-	user = User.objects.get(username=request.session['username'])
+	user = User.objects.get(username=request.session['username'])	
 	user.set_password(request.POST['password1'])
 	user.save()
-	return render(request, 'farmer/profil/index.html', {'farmer':account})
+	messages.add_message(request, messages.INFO, 'Password berhasil diganti')			
+	return HttpResponseRedirect('/data-diri/')		
+
+@login_required(login_url=settings.LOGIN_URL)
+def notifications(request):
+	account = Pengguna.objects.get(username=request.session['username'])
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	notifications = Notifications.objects.filter(farmer_id=account.id).order_by('status','-id') 
+	paginator = Paginator(notifications, 10)
+	page = request.GET.get('page')
+	try:
+		notifications = paginator.page(page)	
+	except PageNotAnInteger:
+		notifications = paginator.page(1)
+	except EmptyPage:
+		notifications = paginator.page(paginator.num_pages)
+	return render(request,'farmer/notification/index.html', {'farmer':account, 'notifications':notifications, 'notifs':notifs, 'num':num})
+
+@login_required(login_url=settings.LOGIN_URL)
+def detailNotifications(request,id):
+	account = Pengguna.objects.get(username=request.session['username'])
+	notifs = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca')
+	num = Notifications.objects.filter(farmer_id=account.id, status='belum dibaca').count()	
+	notifications = Notifications.objects.filter(id=id)
+	notification = Notifications.objects.get(id=id)
+	notification.status = 'sudah dibaca'
+	notification.save()
+	return render(request,'farmer/notification/detail.html', {'farmer':account, 'notifications':notifications, 'notifs':notifs, 'num':num})
+
+@login_required(login_url=settings.LOGIN_URL)
+def deleteNotifications(request,id):
+	account = Pengguna.objects.get(username=request.session['username'])
+	notification = Notifications.objects.get(id=id)
+	notification.delete()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

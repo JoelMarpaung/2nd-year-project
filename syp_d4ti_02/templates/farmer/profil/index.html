@@ -9,6 +9,13 @@
       <h1>
         Profil Petani      
       </h1>
+      {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
     </section>
     <!-- Main content -->
     <section class="content">
@@ -178,7 +185,20 @@
 <!-- Modal -->
 <div id="passwordModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
+<script type="text/javascript">
 
+  function checkForm(form)
+  {
+    if(form.password1.value != "" && form.password1.value == form.password2.value) {
+    } else {
+      alert("Error: Password anda tidak sesuai. Silahkan di cek kembali");
+      form.password1.focus();
+      return false;
+    }
+    return true;
+  }
+
+</script>
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -186,7 +206,7 @@
         <h4 class="modal-title">Form Ubah Password</h4>
       </div>
       <div class="modal-body">
-      <form class="form-horizontal" role="form" action="/ganti-password/" method="POST">
+      <form class="form-horizontal" role="form" action="/ganti-password/" method="POST" onsubmit="return checkForm(this);">
       {% csrf_token %}
       <div class="form-group">
         <label  class="col-sm-3 control-label">Password Lama</label>
@@ -199,14 +219,14 @@
         <label  class="col-sm-3 control-label">Password Baru</label>
 
         <div class="col-sm-9">
-        <input type="password" class="form-control" name="password1" placeholder="Masukkan Password Baru" required>
+        <input type="password" class="form-control" name="password1" placeholder="Masukkan Password Baru" required minlength=8>
         </div>
       </div>
       <div class="form-group">
         <label  class="col-sm-3 control-label">Password Kembali</label>
 
         <div class="col-sm-9">
-        <input type="password" class="form-control" name="password2" placeholder="Masukkan Password Kembali" required>
+        <input type="password" class="form-control" name="password2" placeholder="Masukkan Password Kembali" required minlength=8>
         </div>
       </div>
                 <div class="box-footer">

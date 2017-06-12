@@ -68,6 +68,16 @@ def tambahKomposisi(request, id):
 				lahan_id = id,
 		)
 	komposisi.save()
+	lahan = Data_Lahan.objects.get(id=komposisi.lahan_id)
+	notif = Notifications(
+			pengirim = 'Quality',
+			judul = 'Tambah Komposisi Lahan',
+			keterangan = 'Komposisi Lahan anda sudah ditambah yaitu, '+request.POST['nama_komposisi'],
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = lahan.farmer_id,
+		)
+	notif.save()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)
@@ -87,6 +97,16 @@ def tambahKomponen(request, id):
 				lahan_id = id,
 		)
 	data_komponen.save()
+	lahan = Data_Lahan.objects.get(id=data_komponen.lahan_id)
+	notif = Notifications(
+			pengirim = 'Quality',
+			judul = 'Tambah Komponen Lahan',
+			keterangan = 'Komponen Lahan anda sudah ditambah yaitu, '+request.POST['nama_komponen'],
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = lahan.farmer_id,
+		)
+	notif.save()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)
@@ -106,6 +126,16 @@ def tambahEstimasi(request, id):
 				lahan_id = id,
 		)
 	estimasi.save()
+	lahan = Data_Lahan.objects.get(id=estimasi.lahan_id)
+	notif = Notifications(
+			pengirim = 'Quality',
+			judul = 'Tambah Estimasi Lahan',
+			keterangan = 'Estimasi Lahan anda sudah ditambah yaitu, '+request.POST['nama_estimasi'],
+			tanggal = datetime.datetime.now(),
+			status = 'belum dibaca',
+			farmer_id = lahan.farmer_id,
+		)
+	notif.save()
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url=settings.LOGIN_ADMIN_URL)

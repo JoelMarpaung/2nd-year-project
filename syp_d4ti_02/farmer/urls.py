@@ -33,4 +33,8 @@ urlpatterns = [
 	url(r'^ganti-foto/',views.gantiFoto, name='gantiFoto'),
 	url(r'^ganti-profil/',views.gantiProfil, name='gantiProfil'),
 	url(r'^ganti-password/',views.gantiPassword, name='gantiPassword'),
+
+	url(r'^notifications/',views.notifications, name='notifications'),
+	url(r'^detail-notifications/(?P<id>\d+)/$',views.detailNotifications, name='detailNotifications'),
+	url(r'^hapus-notifikasi/(?P<id>\d+)/$',views.deleteNotifications, name='deleteNotifications'),
 ]
